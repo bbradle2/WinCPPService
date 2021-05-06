@@ -64,6 +64,8 @@ int main(int argc, char** argv)
         if (g_StopEvent)
             CloseHandle(g_StopEvent);
 
+        l_RunThread = NULL;
+        g_StopEvent = NULL;
         return 0;
     }
 }
@@ -122,6 +124,7 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR* argv)
         {
             WaitForSingleObject(l_RunThread, INFINITE);
             CloseHandle(l_RunThread);
+            l_RunThread = NULL;
         }
 
         //while (WaitForSingleObject(g_StopEvent, INFINITE) != WAIT_OBJECT_0)
@@ -137,6 +140,9 @@ void WINAPI ServiceMain(DWORD argc, LPTSTR* argv)
     If g_SystemShutdown, you can skip freeing memory etc. */
     if(g_StopEvent)
         CloseHandle(g_StopEvent);
+
+    
+    g_StopEvent = NULL;
 
     ReportStatus(SERVICE_STOPPED);
 }
